@@ -1,36 +1,57 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
  import './index.css';
+ import Spinner from './Spinner';
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
 import SeasonDisplay from './SeasonDisplay';
 
-class App extends React.Component
-{
+class App extends React.Component{
     state={ lat:null , errorMessage:''};
 
-    componentDidMount()
-    {
+    componentDidMount(){
         window.navigator.geolocation.getCurrentPosition(
             position => this.setState({ lat: position.coords.latitude}),
             err => this.setState({errorMessage: err.message})
         );
     }
 
-
-rendor() {
-    if(this.state.errorMessage && !this.state.lat)
-    {
-    return <div>error : {this.state.errorMessage}</div>;
+    renderContent(){
+        if(this.state.errorMessage && !this.state.lat)
+        {
+        return <div>error : {this.state.errorMessage}</div>;
+        }
+    
+        if(!this.state.errorMessage && this.state.lat)
+        {
+        //return <div>latitude : {this.state.lat}</div>;
+        return <SeasonDisplay lat={this.state.lat} />;
+        }
+    
+        return <Spinner message="please accept location request "/>;
+        //return <div>loading!</div>;
     }
+    
 
-    if(!this.state.errorMessage && this.state.lat)
-    {
-    //return <div>latitude : {this.state.lat}</div>;
-    return <SeasonDisplay lat={this.state.lat} />
-    }
+render() {
+    return (
+        <div className="border red">
+            {this.renderContent()}
+        </div>
+    );
+    // if(this.state.errorMessage && !this.state.lat)
+    // {
+    // return <div>error : {this.state.errorMessage}</div>;
+    // }
 
-    return <div>loading!</div>
+    // if(!this.state.errorMessage && this.state.lat)
+    // {
+    // //return <div>latitude : {this.state.lat}</div>;
+    // return <SeasonDisplay lat={this.state.lat} />;
+    // }
+
+    // return <Spinner message="please accept location request "/>;
+    // //return <div>loading!</div>;
 }
 }
 
